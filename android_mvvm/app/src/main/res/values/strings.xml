@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MVVM APP</string>
+    <string name="title_activity_header">Header</string>
 </resources>
