@@ -1,6 +1,5 @@
 package com.test.mvvmapp.ui.screens
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -9,15 +8,11 @@ import com.test.mvvmapp.viewModel.PostViewModel
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
@@ -30,7 +25,6 @@ import com.test.mvvmapp.ui.navigation.NavRoutes
 @Composable
 fun HomeScreen(navController: NavHostController, viewModel: PostViewModel = viewModel()) {
    val state = viewModel.uiState
-   val listState = rememberLazyListState()
 
    Box(modifier = Modifier.fillMaxSize()) {
       when (state) {
@@ -42,29 +36,12 @@ fun HomeScreen(navController: NavHostController, viewModel: PostViewModel = view
 
          is UiState.Success -> {
             val posts = state.post
-            val isLoadingMore = viewModel.isLoadingMore
-
-            val shouldLoadMore = remember {
-               derivedStateOf {
-                  val lastVisibleItem = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
-                  lastVisibleItem >= posts.size - 5 && !isLoadingMore
-               }
-            }
-
-            LaunchedEffect(shouldLoadMore.value) {
-               Log.e("IS_MORE", "call more")
-               if (shouldLoadMore.value) {
-                  Log.e("IS_MORE", shouldLoadMore.value.toString())
-                  viewModel.more()
-               }
-            }
 
             Column(modifier = Modifier.padding(horizontal = 10.dp)) {
                Header("Posts")
 
                LazyColumn(
-                  state = listState,
-                  contentPadding = PaddingValues(bottom = 100.dp), // leave space for loader
+                  contentPadding = PaddingValues(bottom = 100.dp),
                   verticalArrangement = Arrangement.spacedBy(8.dp),
                   modifier = Modifier.fillMaxSize()
                ) {
@@ -77,21 +54,6 @@ fun HomeScreen(navController: NavHostController, viewModel: PostViewModel = view
                         color = MaterialTheme.colorScheme.outlineVariant
                      )
                   }
-               }
-            }
-
-            // Sticky loading bar at the bottom of screen
-            if (isLoadingMore) {
-               Box(
-                  modifier = Modifier
-                     .fillMaxWidth()
-                     .align(Alignment.BottomCenter)
-                     .padding(12.dp),
-                  contentAlignment = Alignment.Center
-               ) {
-                  CircularProgressIndicator(
-                     modifier = Modifier.size(24.dp)
-                  )
                }
             }
          }
