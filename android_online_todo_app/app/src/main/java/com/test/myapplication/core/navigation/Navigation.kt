@@ -21,19 +21,19 @@ fun  Navigation () {
     Scaffold{ innerPadding ->
         NavHost(navController = navController, startDestination = Routes.Main, modifier = Modifier.padding(innerPadding)) {
             composable<Routes.Main>(){
-                MainScreen()
+                MainScreen(navController)
             }
             composable<Routes.Home>(){
-                HomeScreen()
+                HomeScreen(navController)
             }
             composable<Routes.Task>(){
-                CreateTaskScreen()
+                CreateTaskScreen(navController)
             }
             composable<Routes.Login>(){
-                LoginScreen()
+                LoginScreen(navController)
             }
             composable<Routes.Register>(){
-                RegisterScreen()
+                RegisterScreen(navController)
             }
         }
     }
