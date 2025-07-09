@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class SplashViewModal: ViewModel() {
-    private val  authApi = RetrofitInstance.authApi;
+    private val  splashApi = RetrofitInstance.splashApi;
 
 
     var result by mutableStateOf<NetworkResponse<SplashModal>>(NetworkResponse.Initial)
@@ -30,7 +30,7 @@ class SplashViewModal: ViewModel() {
 
         viewModelScope.launch{
             try {
-                val res = authApi.me("Bearer $token")
+                val res = splashApi.me("Bearer $token")
 
                 if(res.isSuccessful){
                     res.body().let {
