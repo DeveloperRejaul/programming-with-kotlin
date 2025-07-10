@@ -1,7 +1,6 @@
 package com.test.myapplication.features.auth
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,21 +13,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.test.myapplication.core.theme.Typography
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.test.myapplication.core.api.NetworkResponse
 import com.test.myapplication.core.component.Button
+import com.test.myapplication.core.component.Container
 import com.test.myapplication.core.component.Input
-import com.test.myapplication.core.component.InputVariant
+import com.test.myapplication.core.constance.InputVariant
 import com.test.myapplication.core.navigation.Routes
 
 
@@ -49,13 +50,11 @@ fun LoginScreen(navController: NavHostController, viewModal: AuthViewModal = vie
            else -> Unit
         }
     }
-
-    Column (
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 10.dp),
-        verticalArrangement =Arrangement.Center,
-        horizontalAlignment =  Alignment.CenterHorizontally
+    Container (
+        headerShow = false,
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ){
         Text("Welcome TO TODO App", style = Typography.titleLarge.copy(fontSize = 30.sp, fontWeight = FontWeight.Bold))
         Spacer(modifier = Modifier.height(height = 50.dp))
@@ -71,7 +70,8 @@ fun LoginScreen(navController: NavHostController, viewModal: AuthViewModal = vie
             onChange = { password = it},
             placeholder = "Type your password",
             label = "Password",
-            variant = InputVariant.PASSWORD
+            variant = InputVariant.PASSWORD,
+            keyboardAction = ImeAction.Done
         )
         Spacer(modifier = Modifier.height(height = 10.dp))
         Button(
@@ -95,7 +95,6 @@ fun LoginScreen(navController: NavHostController, viewModal: AuthViewModal = vie
                 Text("Register")
             }
         }
-
     }
 }
 

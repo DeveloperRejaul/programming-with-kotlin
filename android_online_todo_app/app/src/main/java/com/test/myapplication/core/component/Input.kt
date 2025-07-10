@@ -2,6 +2,7 @@ package com.test.myapplication.core.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -19,10 +20,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import com.test.myapplication.core.constance.InputVariant
 
 @Composable
 fun Input (
-    value:String,
+    value: String,
     onChange:(it:String)-> Unit,
     placeholder:String,
     label:String,
@@ -56,7 +58,6 @@ fun Input (
                     Icon(imageVector = image, contentDescription = description)
                 }
             }
-
         }
     )
 }

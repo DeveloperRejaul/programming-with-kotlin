@@ -1,4 +1,4 @@
-package com.test.myapplication.core.component
+package com.test.myapplication.core.constance
 
 enum class InputVariant {
     TEXT,
