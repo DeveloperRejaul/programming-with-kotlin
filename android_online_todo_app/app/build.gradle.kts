@@ -56,7 +56,7 @@ dependencies {
     implementation(libs.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
 
-    // for state management
+    // for state management with livedata
     implementation(libs.androidx.runtime.livedata)
 
     // for http request
