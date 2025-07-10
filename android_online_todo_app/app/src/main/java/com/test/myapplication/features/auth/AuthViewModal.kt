@@ -1,16 +1,26 @@
 package com.test.myapplication.features.auth
 
+import android.annotation.SuppressLint
+import android.app.Application
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.room.Room
 import com.test.myapplication.core.api.NetworkResponse
 import com.test.myapplication.core.api.RetrofitInstance
+import com.test.myapplication.core.database.user.UserDatabase
+import com.test.myapplication.core.database.user.UserEntity
 import kotlinx.coroutines.launch
 
-class AuthViewModal: ViewModel() {
+class AuthViewModal(application: Application) : AndroidViewModel(application) {
     private val authApi = RetrofitInstance.authApi
+
+    // local database
+    private val db = UserDatabase.getInstance(application)
+    private val userDao = db.userDao()
+
 
     private val  _result = MutableLiveData<NetworkResponse<AuthLoginModal>>(NetworkResponse.Initial)
     val result: LiveData<NetworkResponse<AuthLoginModal>> = _result;
@@ -23,6 +33,7 @@ class AuthViewModal: ViewModel() {
                 if(res.isSuccessful) {
                     res.body().let {
                         _result.value = NetworkResponse.Success<AuthLoginModal>(it as AuthLoginModal)
+                        userDao.insert(UserEntity(name = it.username, email = it.email, accessToken = it.accessToken , id = 1))
                     }
                 }else {
                     _result.value = NetworkResponse.Error("Something went wrong")

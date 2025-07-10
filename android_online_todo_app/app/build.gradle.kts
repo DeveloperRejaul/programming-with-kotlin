@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization) // for serialization
+    alias(libs.plugins.ksp) // for room database
 }
 
 android {
@@ -64,6 +65,13 @@ dependencies {
 
     // icon extended
     implementation("androidx.compose.material:material-icons-extended:1.6.1")
+
+
+    // for local database room
+    val room_version = "2.7.2"
+    implementation("androidx.room:room-runtime:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

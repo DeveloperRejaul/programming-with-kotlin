@@ -20,7 +20,7 @@ fun MainScreen(navController: NavController, splashModal: SplashViewModal = view
     val splashResult = splashModal.result
 
     LaunchedEffect(Unit) {
-        splashModal.me(token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJlbWlseXMiLCJlbWFpbCI6ImVtaWx5LmpvaG5zb25AeC5kdW1teWpzb24uY29tIiwiZmlyc3ROYW1lIjoiRW1pbHkiLCJsYXN0TmFtZSI6IkpvaG5zb24iLCJnZW5kZXIiOiJmZW1hbGUiLCJpbWFnZSI6Imh0dHBzOi8vZHVtbXlqc29uLmNvbS9pY29uL2VtaWx5cy8xMjgiLCJpYXQiOjE3NTE3OTcyNTMsImV4cCI6MTc1MTc5OTA1M30._CSsXyWqAxThOLyzv1Wu3f-fH_sHKH5BH7visujiJKw")
+        splashModal.me()
 
         // lessen navigation event from view modal
         splashModal.navEvent.collect { route ->

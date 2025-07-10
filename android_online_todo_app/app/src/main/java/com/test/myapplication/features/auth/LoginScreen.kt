@@ -46,7 +46,7 @@ fun LoginScreen(navController: NavHostController, viewModal: AuthViewModal = vie
                     popUpTo(0)
                 }
             }
-           else -> {}
+           else -> Unit
         }
     }
 
