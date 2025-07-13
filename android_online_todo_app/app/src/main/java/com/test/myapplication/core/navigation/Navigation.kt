@@ -18,23 +18,21 @@ import com.test.myapplication.features.splash.MainScreen
 fun  Navigation () {
    val  navController = rememberNavController()
 
-    Scaffold{ innerPadding ->
-        NavHost(navController = navController, startDestination = Routes.Main, modifier = Modifier.padding(innerPadding)) {
-            composable<Routes.Main>(){
-                MainScreen(navController)
-            }
-            composable<Routes.Home>(){
-                HomeScreen(navController)
-            }
-            composable<Routes.Task>(){
-                CreateTaskScreen(navController)
-            }
-            composable<Routes.Login>(){
-                LoginScreen(navController)
-            }
-            composable<Routes.Register>(){
-                RegisterScreen(navController)
-            }
+    NavHost(navController = navController, startDestination = Routes.Main) {
+        composable<Routes.Main>(){
+            MainScreen(navController)
+        }
+        composable<Routes.Home>(){
+            HomeScreen(navController)
+        }
+        composable<Routes.Task>(){
+            CreateTaskScreen(navController)
+        }
+        composable<Routes.Login>(){
+            LoginScreen(navController)
+        }
+        composable<Routes.Register>(){
+            RegisterScreen(navController)
         }
     }
 }

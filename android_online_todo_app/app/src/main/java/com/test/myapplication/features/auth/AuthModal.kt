@@ -15,3 +15,7 @@ data class AuthLoginModal (
     val gender: String,
     val image: String,
 )
+
+data class RegisterModal(val firstName: String, val lastName: String, val age: Int)
+
+data class RegisterResModal(val id: Int, var firstName: String, var lastName: String, var age: Int)

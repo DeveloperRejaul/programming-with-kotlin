@@ -10,4 +10,10 @@ interface AuthApi {
     suspend fun login (
         @Body body: LoginBodyModal
     ): Response<AuthLoginModal>
+
+
+    @POST("/users/add")
+    suspend fun register (
+        @Body body: RegisterModal
+    ): Response<RegisterResModal>
 }

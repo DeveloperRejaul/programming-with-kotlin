@@ -12,6 +12,9 @@ import com.test.myapplication.core.api.NetworkResponse
 import com.test.myapplication.core.api.RetrofitInstance
 import com.test.myapplication.core.database.user.UserDatabase
 import com.test.myapplication.core.database.user.UserEntity
+import com.test.myapplication.core.navigation.Routes
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class AuthViewModal(application: Application) : AndroidViewModel(application) {
@@ -22,25 +25,50 @@ class AuthViewModal(application: Application) : AndroidViewModel(application) {
     private val userDao = db.userDao()
 
 
-    private val  _result = MutableLiveData<NetworkResponse<AuthLoginModal>>(NetworkResponse.Initial)
-    val result: LiveData<NetworkResponse<AuthLoginModal>> = _result;
+    private val  _loginResult = MutableLiveData<NetworkResponse<AuthLoginModal>>(NetworkResponse.Initial)
+    val loginResult: LiveData<NetworkResponse<AuthLoginModal>> = _loginResult;
+
+    private val  _registerResult = MutableLiveData<NetworkResponse<RegisterResModal>>(NetworkResponse.Initial)
+    val registerResult: LiveData<NetworkResponse<RegisterResModal>> = _registerResult;
+
+
 
     fun login (userName: String,password: String) {
-        _result.value = NetworkResponse.Loading
+        _loginResult.value = NetworkResponse.Loading
         viewModelScope.launch{
             try {
                 val res = authApi.login(LoginBodyModal(password = password, username = userName, expiresInMins = 30))
                 if(res.isSuccessful) {
                     res.body().let {
-                        _result.value = NetworkResponse.Success<AuthLoginModal>(it as AuthLoginModal)
+                        _loginResult.value = NetworkResponse.Success<AuthLoginModal>(it as AuthLoginModal)
                         userDao.insert(UserEntity(name = it.username, email = it.email, accessToken = it.accessToken , id = 1))
                     }
                 }else {
-                    _result.value = NetworkResponse.Error("Something went wrong")
+                    _loginResult.value = NetworkResponse.Error("Something went wrong")
                 }
             }catch (e: Exception) {
                 Log.i("ERROR_AUTH", e.toString())
-                _result.value = NetworkResponse.Error("Failed To load data")
+                _loginResult.value = NetworkResponse.Error("Failed To load data")
+            }
+        }
+    }
+
+
+    fun register (params:RegisterModal) {
+        _registerResult.value = NetworkResponse.Loading
+        viewModelScope.launch{
+            try {
+                val res = authApi.register(params)
+                if(res.isSuccessful) {
+                    res.body().let {
+                        _registerResult.value = NetworkResponse.Success<RegisterResModal>(it as RegisterResModal)
+                    }
+                }else {
+                    _registerResult.value = NetworkResponse.Error("Something went wrong")
+                }
+            }catch (e: Exception) {
+                Log.i("ERROR_AUTH", e.toString())
+                _registerResult.value = NetworkResponse.Error("Failed To create data")
             }
         }
     }

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -38,7 +39,7 @@ fun LoginScreen(navController: NavHostController, viewModal: AuthViewModal = vie
     var userName by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-    val response = viewModal.result.observeAsState()
+    val response = viewModal.loginResult.observeAsState()
 
     LaunchedEffect(response.value) {
         when(response.value) {

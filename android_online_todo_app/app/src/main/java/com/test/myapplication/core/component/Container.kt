@@ -15,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,6 +27,45 @@ import com.test.myapplication.core.theme.Typography
 
 @Composable
 fun Container(
+    modifier: Modifier = Modifier,
+    headerLabel: String = "",
+    headerShow: Boolean = true,
+    onBack:() -> Unit = { },
+    verticalArrangement: Arrangement.Vertical = Arrangement.Top,
+    horizontalAlignment: Alignment.Horizontal = Alignment.Start,
+    useScaffold: Boolean = true,
+    content: @Composable () -> Unit,
+) {
+    if(useScaffold) {
+        Scaffold() { innerPadding ->
+            Con(
+                modifier= modifier.padding(innerPadding),
+                headerLabel=headerLabel,
+                headerShow=headerShow,
+                onBack= onBack,
+                verticalArrangement=verticalArrangement,
+                horizontalAlignment=horizontalAlignment,
+                content=content
+            )
+        }
+    }else {
+        Con(
+            modifier= modifier,
+            headerLabel=headerLabel,
+            headerShow=headerShow,
+            onBack= onBack,
+            verticalArrangement=verticalArrangement,
+            horizontalAlignment=horizontalAlignment,
+            content=content
+        )
+    }
+
+}
+
+
+
+@Composable
+fun Con(
     modifier: Modifier = Modifier,
     headerLabel: String = "",
     headerShow: Boolean = true,
@@ -51,4 +91,3 @@ fun Container(
         }
     }
 }
-

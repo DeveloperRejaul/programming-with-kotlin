@@ -1,16 +1,19 @@
 package com.test.myapplication.core.component
 
+
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.test.myapplication.core.theme.Typography
 
@@ -18,14 +21,22 @@ import com.test.myapplication.core.theme.Typography
 fun Button (
     text:String,
     onClick: () -> Unit,
-    isLoading: Boolean?=null
+    isLoading: Boolean=false
 ) {
     Button(
+        enabled = !isLoading,
         onClick = onClick,
         modifier = Modifier.fillMaxWidth().height(60.dp),
         contentPadding = PaddingValues(vertical = 10.dp),
         // shape = RectangleShape
-        shape = RoundedCornerShape(5.dp)
+        shape = RoundedCornerShape(5.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = if (!isLoading) Color.Blue else Color.Blue.copy(alpha = 0.5f),
+            contentColor = Color.White,
+            disabledContainerColor = Color.Blue.copy(alpha = 0.5f),
+            disabledContentColor = Color.White.copy(alpha = 0.7f)
+        )
+
     ) {
         if(isLoading == true) CircularProgressIndicator(
             modifier = Modifier.width(20.dp).height(20.dp),
