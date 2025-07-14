@@ -19,21 +19,23 @@ import com.test.myapplication.core.theme.Typography
 
 @Composable
 fun Button (
+    modifier: Modifier = Modifier,
     text:String,
     onClick: () -> Unit,
-    isLoading: Boolean=false
+    isLoading: Boolean=false,
+    bg: Color = Color.Blue
 ) {
     Button(
         enabled = !isLoading,
         onClick = onClick,
-        modifier = Modifier.fillMaxWidth().height(60.dp),
+        modifier = modifier.fillMaxWidth().height(60.dp),
         contentPadding = PaddingValues(vertical = 10.dp),
         // shape = RectangleShape
         shape = RoundedCornerShape(5.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (!isLoading) Color.Blue else Color.Blue.copy(alpha = 0.5f),
+            containerColor = if (!isLoading) bg else bg.copy(alpha = 0.5f),
             contentColor = Color.White,
-            disabledContainerColor = Color.Blue.copy(alpha = 0.5f),
+            disabledContainerColor = bg.copy(alpha = 0.5f),
             disabledContentColor = Color.White.copy(alpha = 0.7f)
         )
 

@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.test.myapplication.core.api.NetworkResponse
+import com.test.myapplication.core.component.ScreenCenterLoading
 
 
 @Composable
@@ -32,16 +33,7 @@ fun MainScreen(navController: NavController, splashModal: SplashViewModal = view
 
     when(splashResult) {
         is NetworkResponse.Loading ,NetworkResponse.Initial  -> {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator(
-                    modifier = Modifier.width(30.dp),
-                    color = MaterialTheme.colorScheme.secondary,
-                    trackColor = MaterialTheme.colorScheme.surfaceVariant,
-                )
-            }
+            ScreenCenterLoading()
         }
         else -> Unit
     }

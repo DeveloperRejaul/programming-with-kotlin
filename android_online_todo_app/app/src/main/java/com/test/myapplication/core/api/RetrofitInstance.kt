@@ -1,6 +1,7 @@
 package com.test.myapplication.core.api
 
 import com.test.myapplication.features.auth.AuthApi
+import com.test.myapplication.features.home.HomeApi
 import com.test.myapplication.features.splash.SplashApi
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -19,5 +20,5 @@ object RetrofitInstance {
 
     var splashApi: SplashApi = getInstance().create(SplashApi::class.java)
     var authApi: AuthApi = getInstance().create(AuthApi::class.java)
-    var homeApi: SplashApi = getInstance2().create(SplashApi::class.java)
+    var homeApi: HomeApi = getInstance2().create(HomeApi::class.java)
 }
