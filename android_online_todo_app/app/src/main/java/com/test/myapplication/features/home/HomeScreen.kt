@@ -60,6 +60,7 @@ fun HomeScreen(navController: NavHostController, homeViewModal: HomeViewModal) {
                     val todoList = (todos.value as NetworkResponse.Success<List<HomeModal>>).data
                     ListView(
                         onRefresh = {
+                            page = 1;
                             homeViewModal.getTodos(refreshing = true)
                         },
                         isRefreshing = isRefreshing.value === NetworkResponse.Loading,
