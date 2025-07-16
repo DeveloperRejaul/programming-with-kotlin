@@ -1,5 +1,6 @@
 package com.test.myapplication.features.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.test.myapplication.core.api.NetworkResponse
@@ -111,53 +112,38 @@ class HomeViewModal: ViewModel() {
 
 
     /**
-     * 🚀 Fetches a page of Todos from the Home API and appends it to the existing list.
+     * Removes a todo item with the specified [id] from the server and updates the local state.
      *
-     * This function:
-     * - Updates the `_moreFetching` StateFlow to `Loading` while fetching.
-     * - Calls the API with the given `page` and `limit` parameters.
-     * - If successful, appends the new page of Todos to the current list using `_todos.update`.
-     * - Emits `PaginateResponse.Success` to indicate more data was fetched successfully.
-     * - Emits `PaginateResponse.Error` with an appropriate message if the response is empty
-     *   or if an exception occurs.
+     * This function launches a coroutine in [viewModelScope] to call the [homeApi.deleteTodo] API.
+     * If the deletion is successful, it updates the [_todos] StateFlow by removing the todo item
+     * with the given [id] from the current list.
      *
-     * ✅ Safe: Uses `.update {}` to merge old and new lists.
-     * ✅ Handles null response bodies with `?.let`.
-     * ✅ Uses `viewModelScope` for proper coroutine cancellation.
+     * Logs any exception that occurs during the API call.
      *
-     * Note: This function supports infinite scrolling or load-more scenarios.
+     * @param id The unique identifier of the todo item to be deleted.
      */
     fun removeTodo (id: Int) {
         viewModelScope.launch {
-            _todos.update { currentTodos ->
-                if(currentTodos is NetworkResponse.Success) {
-                  val updateData =  currentTodos.data.filterNot { it.id == id }
-                  NetworkResponse.Success(updateData)
-                }else {
-                    currentTodos
+            try {
+                val res = homeApi.deleteTodo(postId = id)
+                if (res.isSuccessful) {
+                    _todos.update { currentTodos ->
+                        if(currentTodos is NetworkResponse.Success) {
+                            val updateData =  currentTodos.data.filterNot { it.id == id }
+                            NetworkResponse.Success(updateData)
+                        }else {
+                            currentTodos
+                        }
+                    }
                 }
+            }catch (e: Exception) {
+                Log.i("DELETE_POST", e.toString())
             }
         }
     }
 
 
-    /**
-     * 🚀 Fetches a page of Todos from the Home API and appends it to the existing list.
-     *
-     * This function:
-     * - Updates the `_moreFetching` StateFlow to `Loading` while fetching.
-     * - Calls the API with the given `page` and `limit` parameters.
-     * - If successful, appends the new page of Todos to the current list using `_todos.update`.
-     * - Emits `PaginateResponse.Success` to indicate more data was fetched successfully.
-     * - Emits `PaginateResponse.Error` with an appropriate message if the response is empty
-     *   or if an exception occurs.
-     *
-     * ✅ Safe: Uses `.update {}` to merge old and new lists.
-     * ✅ Handles null response bodies with `?.let`.
-     * ✅ Uses `viewModelScope` for proper coroutine cancellation.
-     *
-     * Note: This function supports infinite scrolling or load-more scenarios.
-     */
+
     fun  update(todo: HomeModal) {
         viewModelScope.launch {
             _todos.update { currentTodo ->
