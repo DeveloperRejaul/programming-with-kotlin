@@ -67,7 +67,7 @@ fun HomeScreen(navController: NavHostController, homeViewModal: HomeViewModal) {
                         items = todoList,
                         itemKey = {item -> item.id},
                         loadMore = {
-                            page = page+1;
+                            page += 1;
                             homeViewModal.getTodosByPage(page,10)
                         },
                         itemContent = { todo ->
@@ -89,7 +89,7 @@ fun HomeScreen(navController: NavHostController, homeViewModal: HomeViewModal) {
                                 contentAlignment = Alignment.Center
                             ) {
                                 CircularProgressIndicator(
-                                    modifier = Modifier.width(10.dp),
+                                    modifier = Modifier.width(20.dp),
                                     color = MaterialTheme.colorScheme.secondary,
                                     trackColor = MaterialTheme.colorScheme.surfaceVariant,
                                 )

@@ -14,7 +14,8 @@ fun  CreateTaskScreen(navController: NavHostController, homeViewModal: HomeViewM
     Scaffold { innerPadding ->
         Container (
             modifier = Modifier.padding(innerPadding),
-            headerLabel = "Create Task"
+            headerLabel = "Create Task",
+            onBack = {navController.popBackStack()}
         ) {
             Text("Create Task Screen")
         }
