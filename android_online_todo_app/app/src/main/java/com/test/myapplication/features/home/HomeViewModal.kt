@@ -5,8 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.test.myapplication.core.api.NetworkResponse
 import com.test.myapplication.core.api.RetrofitInstance
+import com.test.myapplication.core.navigation.Routes
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -24,6 +27,16 @@ class HomeViewModal: ViewModel() {
     // Refreshing state
     private val _isRefreshing = MutableStateFlow<NetworkResponse<Boolean>>(NetworkResponse.Initial)
     val isRefreshing: StateFlow<NetworkResponse<Boolean>> = _isRefreshing
+
+
+    // for create and update loading
+    private val _isLoading = MutableStateFlow<NetworkResponse<Boolean>>(NetworkResponse.Initial)
+    val isLoading: StateFlow<NetworkResponse<Boolean>> = _isLoading
+
+
+    // Navigation event channel
+    private val _navEvent = Channel<Int>(Channel.BUFFERED)
+    val navEvent = _navEvent.receiveAsFlow()
 
 
     /**
@@ -58,6 +71,7 @@ class HomeViewModal: ViewModel() {
                     if(refreshing) _isRefreshing.value = NetworkResponse.Error("Failed To Refresh data")
                 }
             }catch (e: Exception) {
+                Log.i("APP_ERROR_ACTION", e.toString())
                 _todos.value = NetworkResponse.Error("Failed To load data")
                 if(refreshing) _isRefreshing.value = NetworkResponse.Error("Failed To Refresh data")
             }
@@ -106,6 +120,7 @@ class HomeViewModal: ViewModel() {
                     }
                 }
             }catch (e: Exception) {
+                Log.i("APP_ERROR_ACTION", e.toString())
                 _moreFetching.value = NetworkResponse.Error("Failed To load more data")
             }
         }
@@ -138,25 +153,79 @@ class HomeViewModal: ViewModel() {
                     }
                 }
             }catch (e: Exception) {
-                Log.i("DELETE_POST", e.toString())
+                Log.i("APP_ERROR_ACTION", e.toString())
             }
         }
     }
 
 
+
+    /**
+     * Updates a specific todo item on the server and updates the local state if successful.
+     *
+     * - Sends a PUT request using the `homeApi.update()` function.
+     * - If successful, updates the `_todos` state by replacing the matching item.
+     * - Emits a navigation event via `_navEvent` to indicate completion.
+     * - Handles loading and error states using `_isLoading`.
+     *
+     * @param todo The [HomeModal] object representing the updated todo item.
+     */
     fun update(todo: HomeModal) {
+        _isLoading.value = NetworkResponse.Loading;
         viewModelScope.launch {
-            _todos.update { currentTodo ->
-                if(currentTodo is NetworkResponse.Success) {
-                    val  updateData = currentTodo.data.map { if(it.id == todo.id) todo else it }
-                    NetworkResponse.Success(updateData)
-                }else {
-                    currentTodo
+            try {
+                val res = homeApi.update(todo.id,todo)
+                if(res.isSuccessful) {
+                    _todos.update { currentTodo ->
+                        if(currentTodo is NetworkResponse.Success) {
+                            val  updateData = currentTodo.data.map { if(it.id == todo.id) todo else it }
+                            NetworkResponse.Success(updateData)
+                        }else {
+                            currentTodo
+                        }
+                    }
+                    _isLoading.value = NetworkResponse.Success(true);
+                    _navEvent.send(1)
                 }
+            }catch (e: Exception) {
+                _isLoading.value = NetworkResponse.Error("Update Field");
+                Log.i("APP_ERROR_ACTION", e.toString())
             }
         }
     }
 
 
-    fun create () {}
+    /**
+     * Creates a new todo item by sending a POST request to the backend.
+     *
+     * - Sends the provided [CreatePostModal] data to the API using `homeApi.create()`.
+     * - If the request is successful, appends the newly created todo item to the local `_todos` list.
+     * - Updates the loading state and sends a navigation event signal upon success.
+     * - Handles any exceptions and sets an error state if the request fails.
+     *
+     * @param todo The [CreatePostModal] object containing the data for the new todo item.
+     */
+    fun create (todo: CreatePostModal) {
+        _isLoading.value = NetworkResponse.Loading;
+        viewModelScope.launch {
+            try {
+                val res = homeApi.create(todo)
+                if(res.isSuccessful) {
+                    _todos.update { currentTodo ->
+                        if(currentTodo is NetworkResponse.Success) {
+                            val  updateData = currentTodo.data + res.body()!!
+                            NetworkResponse.Success(updateData)
+                        }else {
+                            currentTodo
+                        }
+                    }
+                    _isLoading.value = NetworkResponse.Success(true);
+                    _navEvent.send(1)
+                }
+            }catch (e: Exception) {
+                _isLoading.value = NetworkResponse.Error("Update Field");
+                Log.i("APP_ERROR_ACTION", e.toString())
+            }
+        }
+    }
 }

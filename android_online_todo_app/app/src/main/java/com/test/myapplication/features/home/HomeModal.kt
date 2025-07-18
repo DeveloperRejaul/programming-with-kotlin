@@ -8,3 +8,8 @@ data class HomeModal(
   val userId: Int
 )
 
+data class CreatePostModal (
+  val body: String,
+  val title: String,
+  val userId: Int
+)
