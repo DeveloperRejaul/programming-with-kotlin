@@ -1,5 +1,6 @@
 package com.test.myapplication.features.home
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -25,6 +26,7 @@ import com.test.myapplication.core.component.ListView
 import com.test.myapplication.core.component.ScreenCenterLoading
 import com.test.myapplication.core.component.TodoItem
 import com.test.myapplication.core.navigation.Routes
+import okhttp3.internal.wait
 
 var page = 1;
 @Composable
@@ -35,14 +37,16 @@ fun HomeScreen(navController: NavHostController, homeViewModal: HomeViewModal) {
 
     // load fast file 10 item
     LaunchedEffect(Unit) {
-        homeViewModal.getTodos()
+        if(todos.value == NetworkResponse.Initial) {
+            homeViewModal.getTodos()
+        }
     }
 
 
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                navController.navigate(Routes.Task)
+                navController.navigate(Routes.Task())
             }) {
                 Icon(Icons.Filled.Add, "Small floating action button.")
             }
@@ -74,12 +78,11 @@ fun HomeScreen(navController: NavHostController, homeViewModal: HomeViewModal) {
                             TodoItem(
                                 todo,
                                 onEdit = {
-                                    homeViewModal.update(HomeModal(id = todo.id, title = "hello Word", body = "Hello Word", userId = 12))
-                                    // navController.navigate(Routes.Task)
+                                     navController.navigate(Routes.Task.from(todo))
                                 },
                                 onDelete = {
                                     homeViewModal.removeTodo(todo.id)
-                                }
+                                },
                             )
                         },
                         isLoadingMore = moreFetching.value === NetworkResponse.Loading,

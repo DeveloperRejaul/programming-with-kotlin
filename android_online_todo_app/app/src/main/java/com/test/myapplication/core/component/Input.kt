@@ -29,7 +29,8 @@ fun Input (
     placeholder:String,
     label:String,
     variant: InputVariant = InputVariant.TEXT,
-    keyboardAction:ImeAction = ImeAction.Next
+    keyboardAction:ImeAction = ImeAction.Next,
+    singleLine: Boolean = true
 ) {
     var isVisible by remember { mutableStateOf(false) }
     val visualTransformation = when (variant) {
@@ -45,7 +46,7 @@ fun Input (
         modifier = Modifier.fillMaxWidth(),
         placeholder = { Text(placeholder) },
         label = {Text(label) },
-        singleLine = true,
+        singleLine = singleLine,
         keyboardOptions = KeyboardOptions(imeAction = keyboardAction),
         visualTransformation = visualTransformation, // for password hide and show
         trailingIcon = {

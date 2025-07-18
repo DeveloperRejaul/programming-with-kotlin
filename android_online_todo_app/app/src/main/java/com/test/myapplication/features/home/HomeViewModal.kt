@@ -17,12 +17,13 @@ class HomeViewModal: ViewModel() {
     private val _todos = MutableStateFlow<NetworkResponse<List<HomeModal>>>(NetworkResponse.Initial)
     val todos: StateFlow<NetworkResponse<List<HomeModal>>> = _todos
 
+    //  More Fetching state
     private val _moreFetching = MutableStateFlow<NetworkResponse<Boolean>>(NetworkResponse.Initial)
     val moreFetching: StateFlow<NetworkResponse<Boolean>> = _moreFetching
 
+    // Refreshing state
     private val _isRefreshing = MutableStateFlow<NetworkResponse<Boolean>>(NetworkResponse.Initial)
     val isRefreshing: StateFlow<NetworkResponse<Boolean>> = _isRefreshing
-
 
 
     /**
@@ -143,8 +144,7 @@ class HomeViewModal: ViewModel() {
     }
 
 
-
-    fun  update(todo: HomeModal) {
+    fun update(todo: HomeModal) {
         viewModelScope.launch {
             _todos.update { currentTodo ->
                 if(currentTodo is NetworkResponse.Success) {
@@ -156,4 +156,7 @@ class HomeViewModal: ViewModel() {
             }
         }
     }
+
+
+    fun create () {}
 }

@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.test.myapplication.features.auth.LoginScreen
 import com.test.myapplication.features.auth.RegisterScreen
 import com.test.myapplication.features.home.CreateTaskScreen
@@ -23,8 +24,9 @@ fun  Navigation(homeViewModal: HomeViewModal) {
         composable<Routes.Home>(){
             HomeScreen(navController, homeViewModal)
         }
-        composable<Routes.Task>(){
-            CreateTaskScreen(navController, homeViewModal)
+        composable<Routes.Task>(){ backStackEntry ->
+            val params = backStackEntry.toRoute<Routes.Task>()
+            CreateTaskScreen(navController, homeViewModal, params)
         }
         composable<Routes.Login>(){
             LoginScreen(navController)

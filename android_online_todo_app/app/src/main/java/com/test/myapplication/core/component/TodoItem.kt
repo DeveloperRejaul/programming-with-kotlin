@@ -14,6 +14,8 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -22,7 +24,10 @@ import com.test.myapplication.core.theme.Typography
 import com.test.myapplication.features.home.HomeModal
 
 @Composable
-fun TodoItem (todo: HomeModal, onEdit: () -> Unit = {}, onDelete: () -> Unit = {} ) {
+fun TodoItem (todo: HomeModal, onEdit: () -> Unit = {}, onDelete: () -> Unit = {}  ) {
+    val isLoading = remember { mutableStateOf<Boolean>(false) }
+
+
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
@@ -30,7 +35,9 @@ fun TodoItem (todo: HomeModal, onEdit: () -> Unit = {}, onDelete: () -> Unit = {
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
-            modifier = Modifier.padding(10.dp).fillMaxSize(),
+            modifier = Modifier
+                .padding(10.dp)
+                .fillMaxSize(),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Column {
@@ -52,8 +59,25 @@ fun TodoItem (todo: HomeModal, onEdit: () -> Unit = {}, onDelete: () -> Unit = {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Button(text = "Delete",onClick = onDelete, modifier = Modifier.width(80.dp).height(50.dp), bg = MaterialTheme.colorScheme.error)
-                Button(text = "Edit" ,onClick = onEdit, modifier = Modifier.width(80.dp).height(50.dp))
+                Button(
+                    text = "Delete",
+                    onClick = {
+                        isLoading.value = true;
+                        onDelete()
+                    },
+                    modifier = Modifier
+                    .width(80.dp)
+                    .height(50.dp),
+                    bg = MaterialTheme.colorScheme.error,
+                    isLoading = isLoading.value
+                )
+                Button(
+                    text = "Edit" ,
+                    onClick = onEdit,
+                    modifier = Modifier
+                    .width(80.dp)
+                    .height(50.dp)
+                )
             }
         }
     }
